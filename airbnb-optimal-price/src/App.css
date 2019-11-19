@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  /* margin: 20px; */
+  background-color: #ffffff;
+  height: 100vh;
 }
 
 .App-logo {
@@ -19,4 +22,50 @@
 
 .App-link {
   color: #09d3ac;
+}
+.MuiSelect-root{
+  color: #FF5A5F !important;
+
+}
+.MuiFormLabel-root{
+  
+   color: #FF5A5F !important;
+
+}
+.MuiFormLabel-root.Mui-focused
+{
+  /* background-color: #FF5A60 !important; */
+  color: #FF5A5F !important;
+  border-color: #FF5A5F !important;
+  border: #FF5A5F !important;
+
+}
+.logo{
+  width: 300px;
+  height: 170px;
+}
+.proName{
+  text-align: start;
+  align-items: center;
+
+}
+.notification{
+  display: flex;
+ justify-content: flex-end;
+ margin: 5px;
+ align-items: center;
+}
+.listings{
+  text-align: start;
+}
+.contItem{
+  display: flex;
+ justify-content: start;
+ margin: 5px;
+ align-items: center;
+}
+.txt{
+  width: 100%;
+  text-align: center;
+border-bottom: 1px solid #FF5A5F;
 }
