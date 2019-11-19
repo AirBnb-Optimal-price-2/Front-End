@@ -6,7 +6,7 @@ function Home() {
   return (
     <div >
       <h1>Marketing Page</h1>
-      <Link to="/onboarding">Onboarding</Link>
+      <Link to="/dashBoard">DashBoard</Link>
     </div>
   );
 }

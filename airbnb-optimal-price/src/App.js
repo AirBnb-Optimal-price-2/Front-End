@@ -8,6 +8,7 @@ import {
 import './App.css';
 import Home from './Components/Marketing/Home';
 import Onboarding from './Components/Onboarding/Onboarding';
+import DashBoard from './Components/Dashboard/DashBoard';
 
 
 function App() {
@@ -19,6 +20,9 @@ function App() {
         </Route>
         <Route  path='/onboarding'>
           <Onboarding/>
+        </Route>
+        <Route path='/dashBoard'>
+          <DashBoard/>
         </Route>
       </Switch>
     </div>
