@@ -24,7 +24,7 @@ export default function MyForm(props) {
     console.log(props)
     return <Formik
 
-        onSubmit={(values, tools) => {
+        handleSubmit={(values, tools) => {
             tools.resetForm()
             axios.post('https://reqres.in/api/users', values)
                 .then(res => {
@@ -47,7 +47,7 @@ export default function MyForm(props) {
         render={props => {
             return (
                 <div>
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                         <br />
                         <Field name='name' type='text' placeholder='Name: ' />
                         <ErrorMessage name='name' component='div' /><br />

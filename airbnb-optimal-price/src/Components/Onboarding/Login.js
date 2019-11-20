@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
-import axios from 'axios'
-
+import {axiosWithAuth} from '../../utils/axiosWithAuth'
 
 
 const validate = Yup.object().shape({
