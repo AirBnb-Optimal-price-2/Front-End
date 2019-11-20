@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import history from "../../history"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,6 +23,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function HeaderLayout (){
   const classes = useStyles();
+  const logout = () => {
+    localStorage.removeItem('token');
+    history.push("/")
+  }
     return(
 <div className="header">
 <div className={classes.root}>
@@ -32,8 +37,8 @@ export default function HeaderLayout (){
           AirBnB Optimal Price
           </Typography>
           <Button color="inherit">Home</Button>
-          <Button color="inherit">About</Button>
-          <Button color="inherit">FAQ</Button>
+          <Button onClick={() => history.push("/dashboard")} color="inherit">Dashboard</Button>
+            <Button onClick={logout} color="inherit">Log Out</Button>
         </Toolbar>
       </AppBar>
     </div>

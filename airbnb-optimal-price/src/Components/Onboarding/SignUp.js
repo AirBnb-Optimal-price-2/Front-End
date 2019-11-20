@@ -14,8 +14,8 @@ import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { TextField } from "formik-material-ui";
-import { axiosWithAuth } from "../../utils/axiosWithAuth";
-
+import { connect } from "react-redux"
+import {register} from '../../redux/action'
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -59,12 +59,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SignUp = ({ values }) => {
+const SignUp = ({ values,message }) => {
   const classes = useStyles();
   const [valuess, setValues] = useState({
     password: ""
   });
-  const [message, setMessage] = useState("");
   const handleChange = prop => event => {
     setValues({ ...valuess, [prop]: event.target.value });
   };
@@ -175,16 +174,17 @@ const FormikSignUp = withFormik({
     // )
   }),
   //You can use this to see the values
-  handleSubmit(values) {
-    console.log(values);
-    axiosWithAuth()
-      .post("/api/auth/register", values)
-      .then(res => {
-        console.log(res.data);
-        localStorage.setItem('token',res.data.token)
-        localStorage.setItem('userId',res.data.user_id)
-      })
-      .catch(err => console.log(err.res));
+  handleSubmit(values, {resetForm, ...rest}) {
+    rest.props.register(values);
+    resetForm();
   }
+
 })(SignUp);
-export default FormikSignUp;
+const mapStateToProps = state => {
+  console.log(state)
+  return {
+    loading: state.loading,
+    message: state.message
+  }
+}
+export default  connect (mapStateToProps,{register}) (FormikSignUp);

@@ -14,8 +14,10 @@ import { Link } from "react-router-dom";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { TextField } from "formik-material-ui";
-import { axiosWithAuth } from "../../utils/axiosWithAuth";
+import { connect } from "react-redux"
 
+
+import {login} from '../../redux/action'
 
 
 function Copyright() {
@@ -60,7 +62,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
- const Login= ({values})=> {
+ const Login= ()=> {
   const classes = useStyles();
 
   return (
@@ -143,17 +145,14 @@ const FormikLogin = withFormik({
     password: Yup.string().required("Please enter password")
   }),
   //You can use this to see the values
-  handleSubmit(values) {
-    axiosWithAuth()
-      .post("/api/auth/login", values)
-      .then(res => {
-        console.log(res.data);
-        localStorage.setItem('token',res.data.token)
-        localStorage.setItem('userId',res.data.user_id)
-      })
-      .catch(err => console.log(err.res));
+  handleSubmit(values,{resetForm,...rest}){
+    rest.props.login(values)
   }
 })(Login);
-console.log("This is the HOC", FormikLogin);
-export default FormikLogin;
+const mapStateToProps = state => {
+  return {
+    loading: state.loading
+  }
+}
+export default connect (mapStateToProps,{login})(FormikLogin);
 

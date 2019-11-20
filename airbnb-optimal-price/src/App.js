@@ -14,9 +14,9 @@ function App() {
         <Onboarding />
        
         <Route exact path="/"  render={()=><Login/>}  />
-        <Route  exact path="/SignUp" component={SignUp} />
-        <Route  exact path="/ForgetPassword" component={ForgetPassword} />
-        <PrivateRoute  exact path="/dashboard" render={props => <DashBoard {...props}/>} />
+        <PrivateRoute  path="/dashboard" render ={()=><DashBoard/>}  />
+        <Route    path="/SignUp" component={SignUp} />
+        <Route    path="/ForgetPassword" component={ForgetPassword} />
 
 
         
