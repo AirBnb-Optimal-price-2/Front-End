@@ -5,7 +5,7 @@ import {axiosWithAuth} from '../../utils/axiosWithAuth'
 
 
 const validate = Yup.object().shape({
-    name: Yup.string()
+    username: Yup.string()
         .min(5, 'Must be between 5 and 15')
         .max(15, 'Must be between 5 and 15')
         .required('This is a required field'),
@@ -34,7 +34,7 @@ export default function MyForm(props) {
         validationSchema={validate}
 
         initialValues={{
-            name: '',
+            username: '',
             password: ''
         }}
         render={props => {
@@ -42,8 +42,8 @@ export default function MyForm(props) {
                 <div>
                     <Form>
                         <br />
-                        <Field name='name' type='text' placeholder='Name: ' />
-                        <ErrorMessage name='name' component='div' /><br />
+                        <Field name='username' type='text' placeholder='Username: ' />
+                        <ErrorMessage name='username' component='div' /><br />
                         <Field name='password' type='text' placeholder='Password: ' />
                         <ErrorMessage name='password' component='div' /><br />
                         <input type='submit' />
