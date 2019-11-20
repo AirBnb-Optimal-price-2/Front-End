@@ -15,7 +15,7 @@ import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { TextField } from "formik-material-ui";
 import { connect } from "react-redux"
-
+import history from '../../history'
 
 import {login} from '../../redux/action'
 
@@ -24,7 +24,7 @@ function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
         {'Copyright © '}
-        <Link color="inherit" href="#">
+        <Link color="inherit" >
          AirBnB
         </Link>{' '}
         {new Date().getFullYear()}
@@ -62,9 +62,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
- const Login= ()=> {
+ const Login= (props)=> {
   const classes = useStyles();
-
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />

@@ -48,11 +48,15 @@ export const useReducer = (state = initialState, action) => {
                 currentUser: {}
             }
         case LOGIN_SUCCESS:
+            console.log("from reducer", action.payload)
             return {
                 ...state,
                 loading: false,
                 message:action.payload
+
+                
             }
+           
         case LOGIN_FAILURE:
             return {
                 ...state,
@@ -75,9 +79,9 @@ export const useReducer = (state = initialState, action) => {
         case REGISTER_FAILURE:
             var mssg=""
             if(action.payload.includes('already')){
-                 mssg="User already Exits"
+                 mssg="User already Exists"
             }
-            else mssg="Server not Responidng"
+            else mssg="Server not Responding"
             return {
                 ...state,
                 error: action.payload,

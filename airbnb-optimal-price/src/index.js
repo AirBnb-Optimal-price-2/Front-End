@@ -15,7 +15,7 @@ export const store = createStore(useReducer, applyMiddleware(thunk))
 ReactDOM.render(
   <Provider store={store}>
   <Router history={history}>
-    {" "}
+ 
     <App />
   </Router>
   </Provider>,

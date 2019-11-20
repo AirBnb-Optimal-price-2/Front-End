@@ -124,7 +124,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const DashBoard=({props,fetchProfile})=> {
-  const { container } = props;
+  const { container } ={ props};
+  const message= localStorage.getItem('message')
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -155,7 +156,9 @@ const DashBoard=({props,fetchProfile})=> {
   };
 
   const drawer = (
+  
     <div>
+      
       <Grid container justify="center" alignItems="center">
         <img className="logo" src={Airbnb2} alt="Logo" />
       </Grid>
@@ -164,7 +167,8 @@ const DashBoard=({props,fetchProfile})=> {
         <ListItemText>  <Grid container justify="center" alignItems="center">
       <Avatar alt="Remy Sharp" src={avater} className={classes.bigAvatar} />
     </Grid></ListItemText>
-        <ListItemText> Adela Adeoye </ListItemText>
+    
+        <ListItemText> {message} </ListItemText>
         <Button className={classes.button}>Edit Profile</Button>
       </List>
       <Divider />
