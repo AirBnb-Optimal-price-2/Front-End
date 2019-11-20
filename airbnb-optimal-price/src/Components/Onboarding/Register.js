@@ -47,7 +47,7 @@ export default function MyForm(props) {
         render={props => {
             return (
                 <div>
-                    <Form onSubmit={handleSubmit}>
+                    <Form onSubmit="">
                         <br />
                         <Field name='name' type='text' placeholder='Name: ' />
                         <ErrorMessage name='name' component='div' /><br />
