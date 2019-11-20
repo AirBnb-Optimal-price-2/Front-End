@@ -6,12 +6,8 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -19,10 +15,8 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import Airbnb2 from "../../images/Airbnb2.png";
@@ -40,6 +34,7 @@ import LocalOfferOutlinedIcon from "@material-ui/icons/LocalOfferOutlined";
 import AttachMoneyOutlinedIcon from "@material-ui/icons/AttachMoneyOutlined";
 import avater from "../../images/avater.jpg"
 import AddListing from "./AddListing";
+import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined';
 
 const drawerWidth = 240;
 
@@ -164,7 +159,6 @@ function DashBoard(props) {
       </Grid>
       <Divider />
       <List>
-        {/* Image */}
         <ListItemText>  <Grid container justify="center" alignItems="center">
       <Avatar alt="Remy Sharp" src={avater} className={classes.bigAvatar} />
     </Grid></ListItemText>
@@ -220,7 +214,6 @@ function DashBoard(props) {
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
             container={container}
@@ -353,6 +346,19 @@ function DashBoard(props) {
                       </Typography>
                     </div>
                   </div>
+                  <div className="contItem">
+                    <div>
+                      <BathtubOutlinedIcon
+                        style={{ fontSize: 50, color: "#FF5A5F" }}
+                      />
+                    </div>
+                    <div className="txt">
+                      <Typography variant="h5" component="h2">
+                        3
+                      </Typography>
+                    </div>
+                  </div>
+                  
                   <div className="contItem">
                     <div>
                       <LocalOfferOutlinedIcon
