@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { TextField } from "formik-material-ui";
-import axios from "axios";
+import { axiosWithAuth } from "../../utils/axiosWithAuth";
 
 
 
@@ -80,10 +80,9 @@ const useStyles = makeStyles(theme => ({
               variant="outlined"
               margin="normal"
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Enter username"
+              name="username"
               autoFocus
             />
             <Field component={TextField}
@@ -94,7 +93,6 @@ const useStyles = makeStyles(theme => ({
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -132,24 +130,26 @@ const useStyles = makeStyles(theme => ({
 };
 
 const FormikLogin = withFormik({
-  mapPropsToValues({ email, password }) {
+  mapPropsToValues({ username, password }) {
     return {
      
-      email: email || "",
+      username: username || "",
       password: password || "",
       
     };
   },
   validationSchema: Yup.object().shape({
-    email: Yup.string().required("Email required"),
+    username: Yup.string().required("Username required"),
     password: Yup.string().required("Please enter password")
   }),
   //You can use this to see the values
   handleSubmit(values) {
-    axios
-      .post("https://reqres.in/api/users/", values)
+    axiosWithAuth()
+      .post("/api/auth/login", values)
       .then(res => {
         console.log(res.data);
+        localStorage.setItem('token',res.data.token)
+        localStorage.setItem('userId',res.data.user_id)
       })
       .catch(err => console.log(err.res));
   }

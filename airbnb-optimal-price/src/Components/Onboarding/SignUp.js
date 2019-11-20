@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,7 +14,7 @@ import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { TextField } from "formik-material-ui";
-import axios from "axios";
+import { axiosWithAuth } from "../../utils/axiosWithAuth";
 
 function Copyright() {
   return (
@@ -34,7 +34,8 @@ const useStyles = makeStyles(theme => ({
     height: "100vh"
   },
   image: {
-    backgroundImage: 'url(https://images.pexels.com/photos/1268478/pexels-photo-1268478.jpeg?cs=srgb&dl=antioxidant-berries-beverage-1268478.jpg&fm=jpg)',
+    backgroundImage:
+      "url(https://images.pexels.com/photos/1268478/pexels-photo-1268478.jpeg?cs=srgb&dl=antioxidant-berries-beverage-1268478.jpg&fm=jpg)",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     backgroundPosition: "center"
@@ -60,13 +61,10 @@ const useStyles = makeStyles(theme => ({
 
 const SignUp = ({ values }) => {
   const classes = useStyles();
-  const [valuess, setValues] = React.useState({
-    amount: "",
-    password: "",
-    weight: "",
-    weightRange: "",
-    showPassword: false
+  const [valuess, setValues] = useState({
+    password: ""
   });
+  const [message, setMessage] = useState("");
   const handleChange = prop => event => {
     setValues({ ...valuess, [prop]: event.target.value });
   };
@@ -83,7 +81,7 @@ const SignUp = ({ values }) => {
             On Boarding
           </Typography>
           <Form className={classes.form} noValidate>
-            <Field
+            {/* <Field
               component={TextField}
               variant="outlined"
               margin="normal"
@@ -92,17 +90,17 @@ const SignUp = ({ values }) => {
               label="Full Name"
               name="fullName"
               autoFocus
-            />
+            /> */}
 
             <Field
               component={TextField}
               variant="outlined"
               margin="normal"
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              type="username"
+              label="Enter Username"
+              name="username"
             />
 
             <Field
@@ -117,7 +115,7 @@ const SignUp = ({ values }) => {
               id="password"
               autoComplete="current-password"
             />
-            <Field
+            {/* <Field
               component={TextField}
               variant="outlined"
               margin="normal"
@@ -128,69 +126,8 @@ const SignUp = ({ values }) => {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
-            <Grid container justify={"space-between"}>
-              <Field
-                component={TextField}
-                margin="normal"
-                fullWidth
-                name="weight"
-                label="Weight (lbs)"
-                type="number"
-              />
-              <Field
-                component={TextField}
-                fullWidth
-                select
-                name="height"
-                label="Height"
-                className={clsx(classes.margin, classes.textField)}
-                value={values.weightRange}
-                onChange={handleChange("weightRange")}
-              >
-                <MenuItem value="5'7">5'7</MenuItem>
-                <MenuItem value="5'8">5'8</MenuItem>
-                ))}
-              </Field>
-              <Field
-                component={TextField}
-                fullWidth
-                select
-                name="days"
-                label="Number of days you Excercise"
-                className={clsx(classes.margin, classes.textField)}
-                value={values.weightRange}
-                onChange={handleChange("weightRange")}
-              >
-                <MenuItem value="0">0 day</MenuItem>
-                <MenuItem value="2">1-2 days</MenuItem>
-                <MenuItem value="3">3-4 days</MenuItem>
-                <MenuItem value="6">5-6 days</MenuItem>
-                <MenuItem value="7">7 days</MenuItem>
-                ))}
-              </Field>
-              <Field
-                component={TextField}
-                fullWidth
-                select
-                name="goal"
-                label="Goal"
-                className={clsx(classes.margin, classes.textField)}
-                value={values.weightRange}
-                onChange={handleChange("weightRange")}
-              >
-                <MenuItem value="20">Aggressive Weight Loss</MenuItem>
-                <MenuItem value="15">Moderate Weight Loss</MenuItem>
-                <MenuItem value="10">Deficit Weight Loss</MenuItem>
-                <MenuItem value="0">Maintain Weight</MenuItem>
-                <MenuItem value="10">Moderate Weight Gain</MenuItem>
-                <MenuItem value="15">Aggressive Weight Gain</MenuItem>
-                ))}
-              </Field>
-              {/* nd their goal (drop down list: aggressive weight loss (20% deficit), moderate weight loss (15% deficit), weight loss (10% deficit), maintain weight, moderate weight gain (10% surplus), aggressive weight gain (15% deficit). */}
-            </Grid>
-
-  
+            /> */}
+            <Typography variant="h5">{message}</Typography>
 
             <Button
               type="submit"
@@ -218,44 +155,36 @@ const SignUp = ({ values }) => {
   );
 };
 const FormikSignUp = withFormik({
-  mapPropsToValues({ fullName, email,days,goal,confirmPassword, password, weight, height, dob, gender }) {
+  mapPropsToValues({ username, password }) {
     return {
-      fullName: fullName || "",
-      email: email || "",
-      password: password || "",
-      confirmPassword:confirmPassword||"",
-      weight: weight || "",
-      height: height || "",
-      dob: dob || "",
-      goal: goal || "",
-      days: days || "",
-      gender: gender || ""
+      // fullName: fullName || "",
+      username: username || "",
+      password: password || ""
+      // confirmPassword: confirmPassword || ""
     };
   },
+  
   validationSchema: Yup.object().shape({
-    fullName: Yup.string().required("You must put a Full Name"),
-    email: Yup.string().required("Please enter Valid email address"),
-    weight: Yup.string().required(),
-    height: Yup.string().required(),
-    days: Yup.string().required(),
-    goal: Yup.string().required(),
-    gender: Yup.string().required(),
-    password: Yup.string().required('Password is required'),
-    dob: Yup.string().required("Date of Birth is required"),
-    confirmPassword: Yup.string()
-     .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    // fullName: Yup.string().required("You must put a Full Name"),
+    username: Yup.string().required("Please enter Valid Username address"),
 
+    password: Yup.string().required("Password is required")
+    // confirmPassword: Yup.string().oneOf(
+    //   [Yup.ref("password"), null],
+    //   "Passwords must match"
+    // )
   }),
   //You can use this to see the values
   handleSubmit(values) {
-    axios
-      // .post("https://reqres.in/api/users/", values)
-      .post("https://buildweek-macrocalc.herokuapp.com/createnewuser", values)
+    console.log(values);
+    axiosWithAuth()
+      .post("/api/auth/register", values)
       .then(res => {
-        console.log(res);
+        console.log(res.data);
+        localStorage.setItem('token',res.data.token)
+        localStorage.setItem('userId',res.data.user_id)
       })
       .catch(err => console.log(err.res));
   }
 })(SignUp);
-console.log("This is the HOC", FormikSignUp);
 export default FormikSignUp;
