@@ -1,6 +1,20 @@
 import { axiosWithAuth } from "../../utils/axiosWithAuth"
 import history from "../../history"
 
+// Grabs User's Profile which returns their object of information
+// Passes User's object as payload
+export const FETCH_START = "FETCH_START"
+export const FETCH_SUCCESS = "FETCH_SUCCESS"
+export const FETCH_FAILURE = "FETCH_FAILURE"
+export const fetchProfile = () => dispatch => {
+    dispatch({ type: FETCH_START })
+    const userId=localStorage.getItem('userId')
+    axiosWithAuth().get(`/api/user/${userId}/listings`)
+        .then(res => dispatch({ type: FETCH_SUCCESS, payload: res.data }))
+        .catch(err => dispatch({ type: FETCH_FAILURE, payload: err.response }))
+}
+
+
 // Logs in the user
 // Saves Authorization token to localStorage
 // Sends user to dashboard
@@ -14,7 +28,7 @@ export const login = credentials => dispatch => {
             console.log(res)
             localStorage.setItem('token', res.data.token)
             localStorage.setItem('userID', res.data.user_id)
-            dispatch({ type: LOGIN_SUCCESS })
+            dispatch({ type: LOGIN_SUCCESS,payload:res.data.message })
             history.push("/dashboard")
         })
         .catch(err => dispatch({ type: LOGIN_FAILURE, payload: err.reponse }))

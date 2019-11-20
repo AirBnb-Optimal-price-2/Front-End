@@ -35,6 +35,8 @@ import AttachMoneyOutlinedIcon from "@material-ui/icons/AttachMoneyOutlined";
 import avater from "../../images/avater.jpg"
 import AddListing from "./AddListing";
 import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined';
+import { connect } from "react-redux"
+import { fetchProfile } from "../../redux/action"
 
 const drawerWidth = 240;
 
@@ -121,7 +123,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function DashBoard(props) {
+const DashBoard=({props,fetchProfile})=> {
   const { container } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -387,16 +389,11 @@ function DashBoard(props) {
       </main>
     </div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+     message:state.message
+  }
 }
-
-// DashBoard.propTypes = {
-//   /**
-//    * Injected by the documentation to work in an iframe.
-//    * You won't need it on your project.
-//    */
-//   container: PropTypes.instanceOf(
-//     typeof Element === "undefined" ? Object : Element
-//   )
-// };
-
-export default DashBoard;
+export default connect(mapStateToProps, {fetchProfile})(DashBoard);
