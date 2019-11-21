@@ -6,12 +6,8 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -19,10 +15,8 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import Airbnb2 from "../../images/Airbnb2.png";
@@ -40,6 +34,9 @@ import LocalOfferOutlinedIcon from "@material-ui/icons/LocalOfferOutlined";
 import AttachMoneyOutlinedIcon from "@material-ui/icons/AttachMoneyOutlined";
 import avater from "../../images/avater.jpg"
 import AddListing from "./AddListing";
+import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined';
+import { connect } from "react-redux"
+import { fetchProfile } from "../../redux/action"
 
 const drawerWidth = 240;
 
@@ -126,14 +123,15 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function DashBoard(props) {
-  const { container } = props;
+const DashBoard=({props,fetchProfile})=> {
+  const { container } ={ props};
+  const message= localStorage.getItem('message')
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const [age, setAge] = React.useState("");
-
+  const [filter, setFilter] = React.useState("");
+  const [listing,setListing]=React.useState("")
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
   React.useEffect(() => {
@@ -141,7 +139,7 @@ function DashBoard(props) {
   }, []);
 
   const handleChange = event => {
-    setAge(event.target.value);
+    setFilter(event.target.value);
   };
 
   const handleDrawerToggle = () => {
@@ -158,17 +156,19 @@ function DashBoard(props) {
   };
 
   const drawer = (
+  
     <div>
+      
       <Grid container justify="center" alignItems="center">
         <img className="logo" src={Airbnb2} alt="Logo" />
       </Grid>
       <Divider />
       <List>
-        {/* Image */}
         <ListItemText>  <Grid container justify="center" alignItems="center">
       <Avatar alt="Remy Sharp" src={avater} className={classes.bigAvatar} />
     </Grid></ListItemText>
-        <ListItemText> Adela Adeoye </ListItemText>
+    
+        <ListItemText> {message} </ListItemText>
         <Button className={classes.button}>Edit Profile</Button>
       </List>
       <Divider />
@@ -220,7 +220,6 @@ function DashBoard(props) {
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
             container={container}
@@ -264,16 +263,15 @@ function DashBoard(props) {
               <Select
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
-                value={age}
+                value={filter}
                 onChange={handleChange}
                 labelWidth={labelWidth}
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem value={10}>My Listings</MenuItem>
+                <MenuItem value={20}>All Listings</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -355,6 +353,19 @@ function DashBoard(props) {
                   </div>
                   <div className="contItem">
                     <div>
+                      <BathtubOutlinedIcon
+                        style={{ fontSize: 50, color: "#FF5A5F" }}
+                      />
+                    </div>
+                    <div className="txt">
+                      <Typography variant="h5" component="h2">
+                        3
+                      </Typography>
+                    </div>
+                  </div>
+                  
+                  <div className="contItem">
+                    <div>
                       <LocalOfferOutlinedIcon
                         style={{ fontSize: 50, color: "#FF5A5F" }}
                       />
@@ -377,20 +388,15 @@ function DashBoard(props) {
             </Grid>
           </Grid>
         </div>
-        <AddListing handleClose={handleClose} open={open}/>
+        <AddListing setListing={setListing}handleClose={handleClose} open={open}/>
       </main>
     </div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+     message:state.message
+  }
 }
-
-// DashBoard.propTypes = {
-//   /**
-//    * Injected by the documentation to work in an iframe.
-//    * You won't need it on your project.
-//    */
-//   container: PropTypes.instanceOf(
-//     typeof Element === "undefined" ? Object : Element
-//   )
-// };
-
-export default DashBoard;
+export default connect(mapStateToProps, {fetchProfile})(DashBoard);

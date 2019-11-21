@@ -1,58 +1,161 @@
-import React, { useState } from 'react'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
-import axios from 'axios'
+import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import { Link } from "react-router-dom";
+import { withFormik, Form, Field } from "formik";
+import * as Yup from "yup";
+import { TextField } from "formik-material-ui";
+import { connect } from "react-redux"
+import history from '../../history'
+
+import {login} from '../../redux/action'
 
 
+function Copyright() {
+    return (
+      <Typography variant="body2" color="textSecondary" align="center">
+        {'Copyright © '}
+        <Link color="inherit" >
+         AirBnB
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
+    );
+  }
+ 
+const useStyles = makeStyles(theme => ({
+  root: {
+    height: '100vh',
+  },
+  image: {
+    backgroundImage: 'url(https://images.pexels.com/photos/1488031/pexels-photo-1488031.jpeg?cs=srgb&dl=antioxidant-berry-beverage-1488031.jpg&fm=jpg)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  paper: {
+    margin: theme.spacing(8, 4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
-const validate = Yup.object().shape({
-    name: Yup.string()
-        .min(5, 'Must be between 5 and 15')
-        .max(15, 'Must be between 5 and 15')
-        .required('This is a required field'),
-    password: Yup.string()
-        .min(5, 'Must be between 5 and 15')
-        .max(15, 'Must be between 5 and 15')
-        .required('This is a required field')
-})
+ const Login= (props)=> {
+   const submitBtn=()=>{
+     setTimeout(function(){props.history.push('/dashBoard')} ,7000)
+   }
+  const classes = useStyles();
+  return (
+    <Grid container component="main" className={classes.root}>
+      <CssBaseline />
+      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Form className={classes.form} noValidate>
+            <Field component={TextField}
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              id="username"
+              label="Enter username"
+              name="username"
+              autoFocus
+            />
+            <Field component={TextField}
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={submitBtn}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link to="/ForgetPassword" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link to="/SignUp" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+            <Box mt={5}>
+              <Copyright />
+            </Box>
+          </Form>
+        </div>
+      </Grid>
+    </Grid>
+  );
+};
 
-export default function MyForm(props) {
-
-    return <Formik
-
-        onSubmit={(values, tools) => {
-            tools.resetForm()
-
-            props.users.forEach(e => {
-                if (e.name === values.name && e.password === values.password) {
-                    props.changeLogIn(true)
-                    console.log(props.loggedIn)
-                }
-            })
-        }
-
-        }
-        validationSchema={validate}
-
-        initialValues={{
-            name: '',
-            password: ''
-        }}
-        render={props => {
-            return (
-                <div>
-                    <Form>
-                        <br />
-                        <Field name='name' type='text' placeholder='Name: ' />
-                        <ErrorMessage name='name' component='div' /><br />
-                        <Field name='password' type='text' placeholder='Password: ' />
-                        <ErrorMessage name='password' component='div' /><br />
-                        <input type='submit' />
-                    </Form>
-
-                </div>
-            )
-        }}
-
-    />
+const FormikLogin = withFormik({
+  mapPropsToValues({ username, password }) {
+    return {
+     
+      username: username || "",
+      password: password || "",
+      
+    };
+  },
+  validationSchema: Yup.object().shape({
+    username: Yup.string().required("Username required"),
+    password: Yup.string().required("Please enter password")
+  }),
+  //You can use this to see the values
+  handleSubmit(values,{resetForm,...rest}){
+    rest.props.login(values)
+  }
+})(Login);
+const mapStateToProps = state => {
+  return {
+    loading: state.loading
+  }
 }
+export default connect (mapStateToProps,{login})(FormikLogin);
+

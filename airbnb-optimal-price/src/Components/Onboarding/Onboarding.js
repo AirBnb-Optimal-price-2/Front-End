@@ -1,27 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { Route, Link } from 'react-router-dom'
-import Login from './Login'
-import Register from './Register'
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import history from "../../history"
 
-function Onboarding() {
-  const [users, addUser] = useState([])
-  const [loggedIn, changeLogIn] = useState(false)
-  if (loggedIn === false) {
-    return (
-      <div >
-        <Link to='/onboarding/login' >Log In</Link>
-        <Link to='/onboarding/register'>Register</Link>
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
 
-        <Route exact path='/onboarding/login' render={props => <Login {...props} loggedIn={loggedIn} changeLogIn={changeLogIn} users={users}>Log In</Login>} />
-        <Route exact path='/onboarding/register' render={props => <Register {...props} addUser={addUser} users={users}>Register</Register>} />
 
+export default function HeaderLayout (){
+  const classes = useStyles();
+  const logout = () => {
+    localStorage.removeItem('token');
+    history.push("/")
+  }
+    return(
+<div className="header">
+<div className={classes.root}>
+      <AppBar position="fixed">
+        <Toolbar>
+        
+          <Typography variant="h6" className={classes.title}>
+          AirBnB Optimal Price
+          </Typography>
+          <Button color="inherit">Home</Button>
+          <Button onClick={() => history.push("/dashboard")} color="inherit">Dashboard</Button>
+            <Button onClick={logout} color="inherit">Log Out</Button>
+        </Toolbar>
+      </AppBar>
+    </div>
       </div>
     );
-  } else {
-    return (
-      <a href='#' >log Out</a>
-    )
-  }
+    
 }
-
-export default Onboarding;
