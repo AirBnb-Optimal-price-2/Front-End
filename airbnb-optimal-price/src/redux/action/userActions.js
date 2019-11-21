@@ -49,7 +49,6 @@ export const register = credentials => dispatch => {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userID", res.data.user_id);
       dispatch({ type: REGISTER_SUCCESS, payload: res.data.message });
-      history.push("/dashboard");
     })
     .catch(err => {
       dispatch({ type: REGISTER_FAILURE, payload: err.response.data.detail });

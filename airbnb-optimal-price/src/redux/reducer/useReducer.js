@@ -71,10 +71,11 @@ export const useReducer = (state = initialState, action) => {
                 currentUser: {}
             }
         case REGISTER_SUCCESS:
+            const message=`${action.payload} you can now login`
             return {
                 ...state,
                 loading: false,
-                message:action.payload
+                message:message
             }
         case REGISTER_FAILURE:
             var mssg=""

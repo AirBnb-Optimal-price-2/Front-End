@@ -64,10 +64,7 @@ const useStyles = makeStyles(theme => ({
 
  const Login= (props)=> {
    const submitBtn=()=>{
-    //  while(localStorage.getItem("token")&&localStorage.getItem("userID")){
-    //   props.history.push('/dashBoard')
-    //  }
-     setTimeout(function(){props.history.push('/dashBoard')} ,5000)
+     setTimeout(function(){props.history.push('/dashBoard')} ,7000)
    }
   const classes = useStyles();
   return (

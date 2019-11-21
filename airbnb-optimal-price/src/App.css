@@ -69,3 +69,7 @@
   text-align: center;
 border-bottom: 1px solid #FF5A5F;
 }
+.cardDiv{
+  height: 400px;
+  overflow: auto;
+}

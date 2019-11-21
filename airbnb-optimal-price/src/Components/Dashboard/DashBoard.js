@@ -130,8 +130,8 @@ const DashBoard=({props,fetchProfile})=> {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const [age, setAge] = React.useState("");
-
+  const [filter, setFilter] = React.useState("");
+  const [listing,setListing]=React.useState("")
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
   React.useEffect(() => {
@@ -139,7 +139,7 @@ const DashBoard=({props,fetchProfile})=> {
   }, []);
 
   const handleChange = event => {
-    setAge(event.target.value);
+    setFilter(event.target.value);
   };
 
   const handleDrawerToggle = () => {
@@ -263,16 +263,15 @@ const DashBoard=({props,fetchProfile})=> {
               <Select
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
-                value={age}
+                value={filter}
                 onChange={handleChange}
                 labelWidth={labelWidth}
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem value={10}>My Listings</MenuItem>
+                <MenuItem value={20}>All Listings</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -389,7 +388,7 @@ const DashBoard=({props,fetchProfile})=> {
             </Grid>
           </Grid>
         </div>
-        <AddListing handleClose={handleClose} open={open}/>
+        <AddListing setListing={setListing}handleClose={handleClose} open={open}/>
       </main>
     </div>
   );

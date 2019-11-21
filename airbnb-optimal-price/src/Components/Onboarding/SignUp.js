@@ -59,14 +59,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SignUp = ({ values,message }) => {
+const SignUp = ({ values,message,props }) => {
   const classes = useStyles();
   const [valuess, setValues] = useState({
     password: ""
   });
-  const handleChange = prop => event => {
-    setValues({ ...valuess, [prop]: event.target.value });
-  };
+  const submitBtn=()=>{
+    setTimeout(function(){props.history.push('/dashBoard')} ,7000)
+  }
+ 
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -80,16 +81,7 @@ const SignUp = ({ values,message }) => {
             On Boarding
           </Typography>
           <Form className={classes.form} noValidate>
-            {/* <Field
-              component={TextField}
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              id="name"
-              label="Full Name"
-              name="fullName"
-              autoFocus
-            /> */}
+          
 
             <Field
               component={TextField}
@@ -114,18 +106,7 @@ const SignUp = ({ values,message }) => {
               id="password"
               autoComplete="current-password"
             />
-            {/* <Field
-              component={TextField}
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="confirmPassword"
-              label="Confirm Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            /> */}
+           
             <Typography variant="h5">{message}</Typography>
 
             <Button
