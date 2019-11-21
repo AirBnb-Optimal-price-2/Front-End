@@ -1,6 +1,8 @@
 {
     "version": 2,
     "name": "airbnb-optimal-price",
-    "builds": [{"src":"airbnb-optimal-price/package.json", "use": "@now/static-build", "config": {"distDir": "build"} }],
-    "routes": [{"src": "/(.*)", "dest": "airbnb-optimal-price/$1"}]
+    "builds": [{ "src": "airbnb-optimal-price/package.json", "use": "@now/static-build", "config": {"distDir": "build"} }],
+    "routes": [
+        { "src": "/(.*)", "dest": "airbnb-optimal-price/$1" }
+    ]
 }
