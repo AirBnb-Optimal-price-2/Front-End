@@ -63,6 +63,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
  const Login= (props)=> {
+   const submitBtn=()=>{
+    //  while(localStorage.getItem("token")&&localStorage.getItem("userID")){
+    //   props.history.push('/dashBoard')
+    //  }
+     setTimeout(function(){props.history.push('/dashBoard')} ,5000)
+   }
   const classes = useStyles();
   return (
     <Grid container component="main" className={classes.root}>
@@ -105,6 +111,7 @@ const useStyles = makeStyles(theme => ({
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={submitBtn}
             >
               Sign In
             </Button>

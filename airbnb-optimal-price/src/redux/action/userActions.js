@@ -30,7 +30,7 @@ export const login = credentials => dispatch => {
       localStorage.setItem("userID", res.data.user_id);
       localStorage.setItem("message", res.data.message);
       dispatch({ type: LOGIN_SUCCESS, payload: res.data.message });
-      history.push("/SignUp");
+    //   history.push({ pathname: '/dashBoard' })
     })
     .catch(err => dispatch({ type: LOGIN_FAILURE, payload: err.reponse }));
 };
