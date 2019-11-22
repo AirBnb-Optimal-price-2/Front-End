@@ -17,6 +17,7 @@ import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -75,7 +76,8 @@ export default function AddListing(props) {
     // }
     // else if ((e.target.value == "false")) {
     //   setListing({ ...listing, [e.target.name]: false });
-      if (
+    // }
+    if (
       e.target.name == "accomodates" ||
       e.target.name == "bedrooms" ||
       e.target.name == "bathrooms" ||
@@ -90,10 +92,38 @@ export default function AddListing(props) {
   };
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(listing);
-    props.setListing(listing);
-    setListing(initialListing);
-
+    const sendListingBackDS = {
+      ...listing,
+      wifi: listing.wifi === "true" ? 1 : 0,
+      tv: listing.tv === "true" ? 1 : 0,
+      Laptop_friendly_workspace:
+        listing.Laptop_friendly_workspace === "true" ? 1 : 0,
+      family_kid_friendly: listing.family_kid_friendly === "true" ? 1 : 0,
+      smoking_allowed: listing.smoking_allowed === "true" ? 1 : 0
+    };
+    console.log("Data Science", sendListingBackDS);
+    axios
+      .post(
+        "https://cors-anywhere.herokuapp.com/https://pred-airbnb.herokuapp.com/json",
+        sendListingBackDS
+      )
+      .then(res => {
+        console.log("data scie endpoint", res);
+        const sendListingBackend = {
+          ...listing,
+          wifi: listing.wifi === "true",
+          tv: listing.tv === "true",
+          Laptop_friendly_workspace:
+            listing.Laptop_friendly_workspace === "true",
+          family_kid_friendly: listing.family_kid_friendly === "true",
+          smoking_allowed: listing.smoking_allowed === "true",
+          optimal_price: res.data.optimal_price
+        };
+        console.log("Back end", sendListingBackend);
+        props.setListing(sendListingBackend);
+        setListing(initialListing);
+      })
+      .catch(error => console.log(error));
     props.handleClose();
   };
 
@@ -284,7 +314,6 @@ export default function AddListing(props) {
                       >
                         <FormLabel component="legend">wifi</FormLabel>
                         <RadioGroup
-                          required
                           name="wifi"
                           value={listing.wifi}
                           onChange={handleChange}
@@ -293,8 +322,6 @@ export default function AddListing(props) {
                             value="true"
                             control={<Radio />}
                             label="Yes"
-                  
-                            
                           />
                           <FormControlLabel
                             value="false"

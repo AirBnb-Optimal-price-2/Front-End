@@ -23,14 +23,14 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
 export const login = credentials => dispatch => {
   dispatch({ type: LOGIN_START });
-  axiosWithAuth()
+  return axiosWithAuth()
     .post("/api/auth/login", credentials)
     .then(res => {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userID", res.data.user_id);
       localStorage.setItem("message", res.data.message);
       dispatch({ type: LOGIN_SUCCESS, payload: res.data.message });
-    //   history.push({ pathname: '/dashBoard' })
+      // history.push({ pathname: '/dashBoard' })
     })
     .catch(err => dispatch({ type: LOGIN_FAILURE, payload: err.reponse }));
 };
@@ -43,7 +43,7 @@ export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAILURE = "REGISTER_FAILURE";
 export const register = credentials => dispatch => {
   dispatch({ type: REGISTER_START });
-  axiosWithAuth()
+ return axiosWithAuth()
     .post("/api/auth/register", credentials)
     .then(res => {
       localStorage.setItem("token", res.data.token);

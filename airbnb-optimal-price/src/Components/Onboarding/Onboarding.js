@@ -21,13 +21,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function HeaderLayout (){
+export default function Onboarding (props){
+  console.log(props)
   const classes = useStyles();
-  const logout = () => {
-    localStorage.removeItem('token');
-    history.push("/")
-  }
-    return(
+ return(
 <div className="header">
 <div className={classes.root}>
       <AppBar position="fixed">
@@ -37,8 +34,8 @@ export default function HeaderLayout (){
           AirBnB Optimal Price
           </Typography>
           <Button color="inherit">Home</Button>
-          <Button onClick={() => history.push("/dashboard")} color="inherit">Dashboard</Button>
-            <Button onClick={logout} color="inherit">Log Out</Button>
+          <Button onClick={() => history.push("/dashBoard")} color="inherit">Dashboard</Button>
+            {/* <Button onClick={logout} color="inherit">Log Out</Button> */}
         </Toolbar>
       </AppBar>
     </div>

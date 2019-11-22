@@ -13,8 +13,9 @@ function App() {
   return (
     <div >
 
-        <Onboarding />
+        
        <Router history={history}>
+       < Onboarding />
         <Route exact path="/"  component ={Login}  />
         <Route   exact path="/SignUp" component={SignUp} />
         <Route   exact path="/ForgetPassword" component={ForgetPassword} />

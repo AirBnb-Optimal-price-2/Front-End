@@ -156,8 +156,9 @@ const FormikSignUp = withFormik({
   }),
   //You can use this to see the values
   handleSubmit(values, {resetForm, ...rest}) {
-    rest.props.register(values);
-    resetForm();
+    console.log(rest)
+    rest.props.register(values)
+  
   }
 
 })(SignUp);

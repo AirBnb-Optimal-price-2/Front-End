@@ -32,11 +32,11 @@ import KingBedOutlinedIcon from "@material-ui/icons/KingBedOutlined";
 import NightsStayOutlinedIcon from "@material-ui/icons/NightsStayOutlined";
 import LocalOfferOutlinedIcon from "@material-ui/icons/LocalOfferOutlined";
 import AttachMoneyOutlinedIcon from "@material-ui/icons/AttachMoneyOutlined";
-import avater from "../../images/avater.jpg"
+import avater from "../../images/avater.jpg";
 import AddListing from "./AddListing";
-import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined';
-import { connect } from "react-redux"
-import { fetchProfile } from "../../redux/action"
+import BathtubOutlinedIcon from "@material-ui/icons/BathtubOutlined";
+import { connect } from "react-redux";
+import { fetchProfile } from "../../redux/action";
 
 const drawerWidth = 240;
 
@@ -108,38 +108,37 @@ const useStyles = makeStyles(theme => ({
     border: "1px solid #FF5A5F",
     "&:hover": {
       color: "#fff",
-      background:"#FF5A5F"}
+      background: "#FF5A5F"
+    }
   },
   card: {
     minWidth: 275
   },
   avatar: {
-    margin: 10,
+    margin: 10
   },
   bigAvatar: {
     margin: 10,
     width: 150,
-    height: 150,
-  },
+    height: 150
+  }
 }));
 
-const DashBoard=({props,fetchProfile})=> {
-  const { container } ={ props};
-  const message= localStorage.getItem('message')
+const DashBoard = ({ props, fetchProfile }) => {
+  const { container } = { props };
+  const message = localStorage.getItem("message");
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const [filter, setFilter] = React.useState("");
-  const [listing,setListing]=React.useState("")
+  const [listing, setListing] = React.useState("");
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
+  console.log("return data from backend and data sci listing", listing);
   React.useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
-  React.useEffect(() => {
-    console.log("from dash",listing)
-  }, [listing]);
 
   const handleChange = event => {
     setFilter(event.target.value);
@@ -159,18 +158,23 @@ const DashBoard=({props,fetchProfile})=> {
   };
 
   const drawer = (
-  
     <div>
-      
       <Grid container justify="center" alignItems="center">
         <img className="logo" src={Airbnb2} alt="Logo" />
       </Grid>
       <Divider />
       <List>
-        <ListItemText>  <Grid container justify="center" alignItems="center">
-      <Avatar alt="Remy Sharp" src={avater} className={classes.bigAvatar} />
-    </Grid></ListItemText>
-    
+        <ListItemText>
+          {" "}
+          <Grid container justify="center" alignItems="center">
+            <Avatar
+              alt="Remy Sharp"
+              src={avater}
+              className={classes.bigAvatar}
+            />
+          </Grid>
+        </ListItemText>
+
         <ListItemText> {message} </ListItemText>
         <Button className={classes.button}>Edit Profile</Button>
       </List>
@@ -366,7 +370,7 @@ const DashBoard=({props,fetchProfile})=> {
                       </Typography>
                     </div>
                   </div>
-                  
+
                   <div className="contItem">
                     <div>
                       <LocalOfferOutlinedIcon
@@ -384,14 +388,22 @@ const DashBoard=({props,fetchProfile})=> {
                   </div>
                 </CardContent>
                 <CardActions>
-                  <Button className={classes.btn} size="large">Edit</Button>
-                  <Button className={classes.btn} size="large">Delete</Button>
+                  <Button className={classes.btn} size="large">
+                    Edit
+                  </Button>
+                  <Button className={classes.btn} size="large">
+                    Delete
+                  </Button>
                 </CardActions>
               </Card>
             </Grid>
           </Grid>
         </div>
-        <AddListing setListing={setListing}handleClose={handleClose} open={open}/>
+        <AddListing
+          setListing={setListing}
+          handleClose={handleClose}
+          open={open}
+        />
       </main>
     </div>
   );
@@ -399,7 +411,7 @@ const DashBoard=({props,fetchProfile})=> {
 
 const mapStateToProps = state => {
   return {
-     message:state.message
-  }
-}
-export default connect(mapStateToProps, {fetchProfile})(DashBoard);
+    message: state.message
+  };
+};
+export default connect(mapStateToProps, { fetchProfile })(DashBoard);

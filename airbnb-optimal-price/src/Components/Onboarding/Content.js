@@ -33,7 +33,7 @@ function Content(props) {
         <Grid item xs={12} sm={8} md={6}>
         <Paper className={classes.paper}>
 
-          <SignUp />
+          {/* <SignUp /> */}
           </Paper>
 
         </Grid>
