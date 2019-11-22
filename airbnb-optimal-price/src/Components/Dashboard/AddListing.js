@@ -14,7 +14,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Radio from "@material-ui/core/Radio";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -24,9 +23,9 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    overflow:"auto",
+    overflow: "auto"
   },
-  
+
   button: {
     width: "100%",
     color: "#FF5A5F",
@@ -54,15 +53,15 @@ const initialListing = {
   bedrooms: "",
   bathrooms: "",
   room_type: "",
-  wifi: null,
-  tv:null,
-  Laptop_friendly_workspace:null,
-  family_kid_friendly:null,
-  smoking_allowed:null,
-  minimum_nights:"",
-  extra_people:"",
-  cleaning_fee:"",
-  users_id: ""
+  wifi: false,
+  tv: false,
+  Laptop_friendly_workspace: false,
+  family_kid_friendly: false,
+  smoking_allowed: false,
+  minimum_nights: "",
+  extra_people: "",
+  cleaning_fee: "",
+  users_id: localStorage.getItem("userID")
 };
 export default function AddListing(props) {
   const classes = useStyles();
@@ -71,25 +70,33 @@ export default function AddListing(props) {
 
   const handleChange = e => {
     e.persist();
-    if( e.target.value=="true" ){
-    setListing({ ...listing, [e.target.name]: true });
-    }
-    else if( e.target.value=="false"){
-      setListing({ ...listing, [e.target.name]: false });
-
-    }
-    // else if(  e.target.name== ""){
-
+    // if (e.target.value == "true") {
+    //   setListing({ ...listing, [e.target.name]: true });
     // }
-else
-    {
-    setListing({ ...listing, [e.target.name]: e.target.value });}
+    // else if ((e.target.value == "false")) {
+    //   setListing({ ...listing, [e.target.name]: false });
+      if (
+      e.target.name == "accomodates" ||
+      e.target.name == "bedrooms" ||
+      e.target.name == "bathrooms" ||
+      e.target.name == "minimum_nights" ||
+      e.target.name == "extra_people" ||
+      e.target.name == "cleaning_fee"
+    ) {
+      setListing({ ...listing, [e.target.name]: parseInt(e.target.value) });
+    } else {
+      setListing({ ...listing, [e.target.name]: e.target.value });
+    }
   };
-  const handleSubmit=e=>{
-    e.preventDefault()
-    console.log(listing)
-  }
-  
+  const handleSubmit = e => {
+    e.preventDefault();
+    console.log(listing);
+    props.setListing(listing);
+    setListing(initialListing);
+
+    props.handleClose();
+  };
+
   return (
     <div>
       <Modal
@@ -112,335 +119,353 @@ else
               <Typography variant="h4" component="h2">
                 Add Listing
               </Typography>
+              <form onSubmit={handleSubmit}>
+                <div className="cardDiv">
+                  <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                    spacing={1}
+                  >
+                    <Grid item xs={6} sm={6}>
+                      <TextField
+                        id="outlined-basic"
+                        className={classes.textField}
+                        label="Property Name"
+                        margin="normal"
+                        name="label"
+                        value={listing.label}
+                        onChange={handleChange}
+                        variant="outlined"
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={6} sm={6}>
+                      <FormControl
+                        fullWidth
+                        variant="outlined"
+                        required
+                        className={classes.formControl}
+                      >
+                        <InputLabel
+                          ref={inputLabel}
+                          id="demo-simple-select-label"
+                        >
+                          Neighborhood
+                        </InputLabel>
+                        <Select
+                          labelId="demo-customized-select-label"
+                          id="demo-simple-select"
+                          name="neighborhood"
+                          value={listing.neighborhood}
+                          onChange={handleChange}
+                        >
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          <MenuItem value={1}>Mitte</MenuItem>
+                          <MenuItem value={2}>
+                            Friedrichshain-Kreuzberg
+                          </MenuItem>
+                          <MenuItem value={3}>Pankow</MenuItem>
+                          <MenuItem value={4}>Neukölln</MenuItem>
+                          <MenuItem value={5}>Charlottenburg-Wilm</MenuItem>
+                          <MenuItem value={6}>Tempelhof - Schöneberg</MenuItem>
+                          <MenuItem value={7}>Lichtenberg</MenuItem>
+                          <MenuItem value={8}>Treptow - Köpenick</MenuItem>
+                          <MenuItem value={9}>Steglitz - Zehlendorf</MenuItem>
+                          <MenuItem value={10}>Reinickendorf</MenuItem>
+                          <MenuItem value={11}>Marzahn - Hellersdorf</MenuItem>
+                          <MenuItem value={12}>Spandau </MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                  <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                    spacing={1}
+                  >
+                    <Grid item xs={6} sm={6}>
+                      <TextField
+                        id="outlined-basic"
+                        className={classes.textField}
+                        label="Accomodates"
+                        name="accomodates"
+                        value={listing.accomodates}
+                        onChange={handleChange}
+                        margin="normal"
+                        type="number"
+                        variant="outlined"
+                        required
+                      />
+                    </Grid>
 
-              <div className="cardDiv">
-                <Grid
-                  container
-                  direction="row"
-                  justify="center"
-                  alignItems="center"
-                  spacing={1}
-                >
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      id="outlined-basic"
-                      className={classes.textField}
-                      label="Property Name"
-                      margin="normal"
-                      name="label"
-                      value={listing.label}
-                      onChange={handleChange}
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <FormControl
-                      fullWidth
-                      variant="outlined"
-                      className={classes.formControl}
-                    >
-                      <InputLabel
-                        ref={inputLabel}
-                        id="demo-simple-select-label"
-                      >
-                        Neighborhood
-                      </InputLabel>
-                      <Select
-                        labelId="demo-customized-select-label"
-                        id="demo-simple-select"
-                        name="neighborhood"
-                        value={listing.neighborhood}
+                    <Grid item xs={6} sm={6}>
+                      <TextField
+                        id="outlined-basic"
+                        className={classes.textField}
+                        label="Number of Bedrooms"
+                        margin="normal"
+                        type="number"
+                        variant="outlined"
+                        required
+                        name="bedrooms"
+                        value={listing.bedrooms}
                         onChange={handleChange}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={1}>Mitte</MenuItem>
-                        <MenuItem value={2}>Friedrichshain-Kreuzberg</MenuItem>
-                        <MenuItem value={3}>Pankow</MenuItem>
-                        <MenuItem value={4}>Neukölln</MenuItem>
-                        <MenuItem value={5}>Charlottenburg-Wilm</MenuItem>
-                        <MenuItem value={6}>Tempelhof - Schöneberg</MenuItem>
-                        <MenuItem value={7}>Lichtenberg</MenuItem>
-                        <MenuItem value={8}>Treptow - Köpenick</MenuItem>
-                        <MenuItem value={9}>Steglitz - Zehlendorf</MenuItem>
-                        <MenuItem value={10}>Reinickendorf</MenuItem>
-                        <MenuItem value={11}>Marzahn - Hellersdorf</MenuItem>
-                        <MenuItem value={12}>Spandau </MenuItem>
-                      </Select>
-                    </FormControl>
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
-                <Grid
-                  container
-                  direction="row"
-                  justify="center"
-                  alignItems="center"
-                  spacing={1}
-                >
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      id="outlined-basic"
-                      className={classes.textField}
-                      label="Accomodates"
-                      name="accomodates"
-                      value={listing.accomodates}
-                      onChange={handleChange}
-                      margin="normal"
-                      type="number"
-                      variant="outlined"
-                    />
+                  <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                    spacing={1}
+                  >
+                    <Grid item xs={6} sm={6}>
+                      <TextField
+                        id="outlined-basic"
+                        className={classes.textField}
+                        label="Number of Bathrooms"
+                        margin="normal"
+                        type="number"
+                        variant="outlined"
+                        required
+                        name="bathrooms"
+                        value={listing.bathrooms}
+                        onChange={handleChange}
+                      />
+                    </Grid>
+                    <Grid item xs={6} sm={6}>
+                      <FormControl
+                        fullWidth
+                        variant="outlined"
+                        required
+                        className={classes.formControl}
+                      >
+                        <InputLabel
+                          ref={inputLabel}
+                          id="demo-simple-select-label"
+                        >
+                          Room Type
+                        </InputLabel>
+                        <Select
+                          labelId="demo-customized-select-label"
+                          id="demo-simple-select"
+                          name="room_type"
+                          value={listing.room_type}
+                          onChange={handleChange}
+                        >
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          <MenuItem value={15}>Entire home/apt</MenuItem>
+                          <MenuItem value={14}>Private room</MenuItem>
+                          <MenuItem value={36}>Shared room</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                  <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    // alignItems="center"
+                    spacing={1}
+                  >
+                    <Grid item xs={4} sm={4}>
+                      <FormControl
+                        component="fieldset"
+                        className={classes.formControl}
+                      >
+                        <FormLabel component="legend">wifi</FormLabel>
+                        <RadioGroup
+                          required
+                          name="wifi"
+                          value={listing.wifi}
+                          onChange={handleChange}
+                        >
+                          <FormControlLabel
+                            value="true"
+                            control={<Radio />}
+                            label="Yes"
+                  
+                            
+                          />
+                          <FormControlLabel
+                            value="false"
+                            control={<Radio />}
+                            label="No"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <FormControl
+                        component="fieldset"
+                        className={classes.formControl}
+                      >
+                        <FormLabel component="legend">TV</FormLabel>
+                        <RadioGroup
+                          required
+                          name="tv"
+                          value={listing.tv}
+                          onChange={handleChange}
+                        >
+                          <FormControlLabel
+                            value="true"
+                            control={<Radio />}
+                            label="Yes"
+                          />
+                          <FormControlLabel
+                            value="false"
+                            control={<Radio />}
+                            label="No"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <FormControl
+                        component="fieldset"
+                        className={classes.formControl}
+                      >
+                        <FormLabel component="legend">
+                          Laptop Friendly Workspace
+                        </FormLabel>
+                        <RadioGroup
+                          required
+                          name="Laptop_friendly_workspace"
+                          value={listing.Laptop_friendly_workspace}
+                          onChange={handleChange}
+                        >
+                          <FormControlLabel
+                            value="true"
+                            control={<Radio />}
+                            label="Yes"
+                          />
+                          <FormControlLabel
+                            value="false"
+                            control={<Radio />}
+                            label="No"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <FormControl
+                        component="fieldset"
+                        className={classes.formControl}
+                      >
+                        <FormLabel component="legend">Kid Friendly</FormLabel>
+                        <RadioGroup
+                          required
+                          name="family_kid_friendly"
+                          value={listing.family_kid_friendly}
+                          onChange={handleChange}
+                        >
+                          <FormControlLabel
+                            value="true"
+                            control={<Radio />}
+                            label="Yes"
+                          />
+                          <FormControlLabel
+                            value="false"
+                            control={<Radio />}
+                            label="No"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <FormControl
+                        component="fieldset"
+                        className={classes.formControl}
+                      >
+                        <FormLabel component="legend">
+                          Smoking Allowed
+                        </FormLabel>
+                        <RadioGroup
+                          required
+                          name="smoking_allowed"
+                          value={listing.smoking_allowed}
+                          onChange={handleChange}
+                        >
+                          <FormControlLabel
+                            value="true"
+                            control={<Radio />}
+                            label="Yes"
+                          />
+                          <FormControlLabel
+                            value="false"
+                            control={<Radio />}
+                            label="No"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
                   </Grid>
 
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      id="outlined-basic"
-                      className={classes.textField}
-                      label="Number of Bedrooms"
-                      margin="normal"
-                      type="number"
-                      variant="outlined"
-                      name="bedrooms"
-                      value={listing.bedrooms}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid
-                  container
-                  direction="row"
-                  justify="center"
-                  alignItems="center"
-                  spacing={1}
-                >
-                  <Grid item xs={6} sm={6}>
-                    <TextField
-                      id="outlined-basic"
-                      className={classes.textField}
-                      label="Number of Bathrooms"
-                      margin="normal"
-                      type="number"
-                      variant="outlined"
-                      name="bathrooms"
-                      value={listing.bathrooms}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <FormControl
-                      fullWidth
-                      variant="outlined"
-                      className={classes.formControl}
-                    >
-                      <InputLabel
-                        ref={inputLabel}
-                        id="demo-simple-select-label"
-                      >
-                        Room Type
-                      </InputLabel>
-                      <Select
-                        labelId="demo-customized-select-label"
-                        id="demo-simple-select"
-                        name="room_type"
-                        value={listing.room_type}
+                  <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center"
+                    spacing={1}
+                  >
+                    <Grid item xs={6} sm={4}>
+                      <TextField
+                        id="outlined-basic"
+                        className={classes.textField}
+                        label="Minimum Nights"
+                        margin="normal"
+                        type="number"
+                        variant="outlined"
+                        required
+                        name="minimum_nights"
+                        value={listing.minimum_nights}
                         onChange={handleChange}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={15}>Entire home/apt</MenuItem>
-                        <MenuItem value={14}>Private room</MenuItem>
-                        <MenuItem value={36}>Shared room</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </Grid>
-                <Grid
-                  container
-                  direction="row"
-                  justify="flex-start"
-                  // alignItems="center"
-                  spacing={1}
-                >
-                  <Grid item xs={4} sm={4}>
-                    <FormControl
-                      component="fieldset"
-                      className={classes.formControl}
-                    >
-                      <FormLabel component="legend">wifi</FormLabel>
-                      <RadioGroup
-                        aria-label="gender"
-                        name="wifi"
-                        value={listing.wifi}
+                      />
+                    </Grid>
+                    <Grid item xs={6} sm={4}>
+                      <TextField
+                        id="outlined-basic"
+                        className={classes.textField}
+                        label="Extra People ($)"
+                        margin="normal"
+                        type="number"
+                        variant="outlined"
+                        required
+                        name="extra_people"
+                        value={listing.extra_people}
                         onChange={handleChange}
-                      >
-                        <FormControlLabel
-                          value="true"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="false"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={4} sm={4}>
-                    <FormControl
-                      component="fieldset"
-                      className={classes.formControl}
-                    >
-                      <FormLabel component="legend">TV</FormLabel>
-                      <RadioGroup
-                        aria-label="gender"
-                        name="tv"
-                        value={listing.tv}
+                      />
+                    </Grid>
+                    <Grid item xs={6} sm={4}>
+                      <TextField
+                        id="outlined-basic"
+                        className={classes.textField}
+                        label="Cleaning Fee ($)"
+                        margin="normal"
+                        type="number"
+                        variant="outlined"
+                        required
+                        name="cleaning_fee"
+                        value={listing.cleaning_fee}
                         onChange={handleChange}
-                      >
-                        <FormControlLabel
-                          value="true"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="false"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl>
-                    
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={4} sm={4}>
-                    <FormControl
-                      component="fieldset"
-                      className={classes.formControl}
-                    >
-                      <FormLabel component="legend">Laptop Friendly Workspace</FormLabel>
-                      <RadioGroup
-                        aria-label="gender"
-                        name="Laptop_friendly_workspace"
-                        value={listing.Laptop_friendly_workspace}
-                        onChange={handleChange}
-                      >
-                        <FormControlLabel
-                          value="true"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="false"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={4} sm={4}>
-                    <FormControl
-                      component="fieldset"
-                      className={classes.formControl}
-                    >
-                      <FormLabel component="legend">Kid Friendly</FormLabel>
-                      <RadioGroup
-                        aria-label="gender"
-                        name="family_kid_friendly"
-                        value={listing.family_kid_friendly}
-                        onChange={handleChange}
-                      >
-                        <FormControlLabel
-                          value="true"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="false"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={4} sm={4}>
-                    <FormControl
-                      component="fieldset"
-                      className={classes.formControl}
-                    >
-                      <FormLabel component="legend">Smoking Allowed</FormLabel>
-                      <RadioGroup
-                        aria-label="gender"
-                        name="smoking_allowed"
-                        value={listing.smoking_allowed}
-                        onChange={handleChange}
-                      >
-                        <FormControlLabel
-                          value="true"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="false"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                 
-                </Grid>
 
-                <Grid
-                  container
-                  direction="row"
-                  justify="flex-start"
-                  alignItems="center"
-                  spacing={1}
-                >
-                   <Grid item xs={6} sm={4}>
-                    <TextField
-                      id="outlined-basic"
-                      className={classes.textField}
-                      label="Minimum Nights"
-                      margin="normal"
-                      type="number"
-                      variant="outlined"
-                      name="minimum_nights"
-                      value={listing.minimum_nights}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={4}>
-                    <TextField
-                      id="outlined-basic"
-                      className={classes.textField}
-                      label="Extra People ($)"
-                      margin="normal"
-                      type="number"
-                      variant="outlined"
-                      name="extra_people"
-                      value={listing.extra_people}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={4}>
-                    <TextField
-                      id="outlined-basic"
-                      className={classes.textField}
-                      label="Cleaning Fee ($)"
-                      margin="normal"
-                      type="number"
-                      variant="outlined"
-                      name="cleaning_fee"
-                      value={listing.cleaning_fee}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                </Grid>
-          
-                <Button className={classes.button} onClick={handleSubmit}> Save</Button>
-              </div>
+                  <Button className={classes.button} type="submit">
+                    Save
+                  </Button>
+                </div>
+              </form>
             </CardContent>
           </Card>
           {/* </Grid> */}

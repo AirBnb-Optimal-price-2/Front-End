@@ -137,6 +137,9 @@ const DashBoard=({props,fetchProfile})=> {
   React.useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
+  React.useEffect(() => {
+    console.log("from dash",listing)
+  }, [listing]);
 
   const handleChange = event => {
     setFilter(event.target.value);
