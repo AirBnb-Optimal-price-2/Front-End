@@ -38,6 +38,7 @@ import BathtubOutlinedIcon from "@material-ui/icons/BathtubOutlined";
 import { connect } from "react-redux";
 import { fetchProfile } from "../../redux/action";
 import { axiosWithAuth } from "../../utils/axiosWithAuth";
+import EditListing from "./EditListing";
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -136,6 +137,7 @@ const DashBoard = props => {
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = useState(0);
   const userID = localStorage.getItem("userID");
+  const [dataToEdit, setDataToEdit] = useState("");
   useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
@@ -197,6 +199,7 @@ const DashBoard = props => {
     setMobileOpen(!mobileOpen);
   };
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -204,6 +207,15 @@ const DashBoard = props => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleOpenEdit = value => {
+    setOpenEdit(true);
+    setDataToEdit(value)
+    
+  };
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
   };
   const logout = () => {
     localStorage.removeItem("token");
@@ -218,30 +230,25 @@ const DashBoard = props => {
   };
   const updateDelete = () => {
     axiosWithAuth()
-          .get(`/api/user/${userID}/listings`)
-          .then(res => {
-            console.log(
-              "Iam response from listing posted by current user",
-              res.data.listings
-            );
-            setListing(res.data.listings);
-          })
+      .get(`/api/user/${userID}/listings`)
+      .then(res => {
+        console.log(
+          "Iam response from listing posted by current user",
+          res.data.listings
+        );
+        setListing(res.data.listings);
+      })
 
-          .catch(err => {
-            console.log(err);
-          });
-
+      .catch(err => {
+        console.log(err);
+      });
   };
-  
-  const handleDelete = (id) => {
 
-    console.log("Id to be deleted",id)
+  const handleDelete = id => {
     axiosWithAuth()
       .delete(`/api/listings/${id}`)
       .then(res => {
-        console.log("Delete response",res);
-        updateDelete()
-        
+        updateDelete();
       })
 
       .catch(err => {
@@ -402,7 +409,6 @@ const DashBoard = props => {
             justify="flex-start"
             alignItems="flex-start"
           >
-            {console.log("This is the list before display on cards",listing)}
             {listing.map(item => (
               <Grid key={item.id} item xs={12} sm={4}>
                 <Card className={classes.card}>
@@ -489,6 +495,7 @@ const DashBoard = props => {
                       className={classes.btn}
                       size="large"
                       disabled={disable(item.users_id)}
+                      onClick={() => handleOpenEdit(item.id)}
                     >
                       Edit
                     </Button>
@@ -496,7 +503,7 @@ const DashBoard = props => {
                       className={classes.btn}
                       size="large"
                       disabled={disable(item.users_id)}
-                      onClick={()=>handleDelete(item.id)}
+                      onClick={() => handleDelete(item.id)}
                     >
                       Delete
                     </Button>
@@ -506,7 +513,17 @@ const DashBoard = props => {
             ))}
           </Grid>
         </div>
-        <AddListing updateDelete={updateDelete}handleClose={handleClose} open={open} />
+        <AddListing
+          updateDelete={updateDelete}
+          handleClose={handleClose}
+          open={open}
+        />
+        <EditListing
+          updateDelete={updateDelete}
+          handleCloseEdit={handleCloseEdit}
+          openEdit={openEdit}
+          dataToEdit={dataToEdit}
+        />
       </main>
     </div>
   );
