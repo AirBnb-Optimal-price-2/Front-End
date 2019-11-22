@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -47,29 +47,61 @@ const useStyles = makeStyles(theme => ({
     minWidth: 120
   }
 }));
-const initialListing = {
-  label: "",
-  neighborhood: "",
-  accomodates: "",
-  bedrooms: "",
-  bathrooms: "",
-  room_type: "",
-  wifi: false,
-  tv: false,
-  Laptop_friendly_workspace: false,
-  family_kid_friendly: false,
-  smoking_allowed: false,
-  minimum_nights: "",
-  extra_people: "",
-  cleaning_fee: "",
-  users_id: parseInt(localStorage.getItem("userID"))
-};
-export default function AddListing(props) {
+// const initialListing = {
+//   label: "",
+//   neighborhood: "",
+//   accomodates: "",
+//   bedrooms: "",
+//   bathrooms: "",
+//   room_type: "",
+//   wifi: false,
+//   tv: false,
+//   Laptop_friendly_workspace: false,
+//   family_kid_friendly: false,
+//   smoking_allowed: false,
+//   minimum_nights: "",
+//   extra_people: "",
+//   cleaning_fee: "",
+//   users_id: parseInt(localStorage.getItem("userID"))
+// };
+export default function EditListing(props) {
+  const [data, setDataToEdit] = useState({});
+  console.log("props", props);
+  const newlis = parseInt(props.dataToEdit);
+useEffect(()=>{
+  axiosWithAuth()
+  .get(`/api/listings/${newlis}`)
+  .then(res => {
+    console.log("The is the data", res.data);
+    setDataToEdit(res.data);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+},[newlis])
+console.log(data)
+  const initialListing = {
+    label: [data.label],
+    neighborhood: "",
+    accomodates: "",
+    bedrooms: "",
+    bathrooms: "",
+    room_type: "",
+    wifi: false,
+    tv: false,
+    Laptop_friendly_workspace: false,
+    family_kid_friendly: false,
+    smoking_allowed: false,
+    minimum_nights: "",
+    extra_people: "",
+    cleaning_fee: "",
+    users_id: parseInt(localStorage.getItem("userID"))
+  };
+ 
   const classes = useStyles();
   const inputLabel = React.useRef(null);
   const [listing, setListing] = React.useState(initialListing);
   const userID = localStorage.getItem("userID");
-
   const handleChange = e => {
     e.persist();
 
@@ -104,7 +136,7 @@ export default function AddListing(props) {
         sendListingBackDS
       )
       .then(res => {
-        console.log("the list", listing)
+        console.log("the list", listing);
         console.log("data scie endpoint", res);
         const sendListingBackend = {
           ...listing,
@@ -127,30 +159,41 @@ export default function AddListing(props) {
         setListing(initialListing);
       })
       .catch(error => console.log(error));
-    props.handleClose();
+    props.handleCloseEdit();
   };
-
+  // const newlis=parseInt(props.listID)
+  // const test=()=>{
+  //   axiosWithAuth()
+  //   .get(`/api/listings/${newlis}`)
+  //   .then(res=>{
+  //     console.log("Editing liting",res)
+  //   })
+  //   .catch(err=>{
+  //     console.log(err)
+  //   })
+  // }
   return (
     <div>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={props.open}
-        onClose={props.handleClose}
+        open={props.openEdit}
+        onClose={props.handleCloseEdit}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500
         }}
       >
-        <Fade in={props.open}>
+        <Fade in={props.openEdit}>
           {/* <div className={classes.paper}> */}
 
           <Card className={classes.card}>
             <CardContent>
               <Typography variant="h4" component="h2">
-                Add Listing
+                <Button>Test</Button>
+                Edit Listing
               </Typography>
               <form onSubmit={handleSubmit}>
                 <div className="cardDiv">

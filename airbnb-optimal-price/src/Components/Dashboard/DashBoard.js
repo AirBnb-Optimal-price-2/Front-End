@@ -38,6 +38,7 @@ import BathtubOutlinedIcon from "@material-ui/icons/BathtubOutlined";
 import { connect } from "react-redux";
 import { fetchProfile } from "../../redux/action";
 import { axiosWithAuth } from "../../utils/axiosWithAuth";
+import EditListing from "./EditListing";
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -136,6 +137,7 @@ const DashBoard = props => {
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = useState(0);
   const userID = localStorage.getItem("userID");
+  const [dataToEdit, setDataToEdit] = useState("");
   useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
@@ -182,10 +184,7 @@ const DashBoard = props => {
         axiosWithAuth()
           .get(`/api/listings`)
           .then(res => {
-            console.log(
-              "Iam response from listing posted by all user",
-              res
-            );
+            console.log("Iam response from listing posted by all user", res);
             setListing(res.data);
             console.log("Listing by all user", listing);
           })
@@ -194,13 +193,13 @@ const DashBoard = props => {
           });
         break;
     }
-
-      }, [filter]);
+  }, [filter]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -208,6 +207,15 @@ const DashBoard = props => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleOpenEdit = value => {
+    setOpenEdit(true);
+    setDataToEdit(value)
+    
+  };
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
   };
   const logout = () => {
     localStorage.removeItem("token");
@@ -219,6 +227,33 @@ const DashBoard = props => {
     if (parseInt(localStorage.getItem("userID")) === id) {
       return false;
     } else return true;
+  };
+  const updateDelete = () => {
+    axiosWithAuth()
+      .get(`/api/user/${userID}/listings`)
+      .then(res => {
+        console.log(
+          "Iam response from listing posted by current user",
+          res.data.listings
+        );
+        setListing(res.data.listings);
+      })
+
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const handleDelete = id => {
+    axiosWithAuth()
+      .delete(`/api/listings/${id}`)
+      .then(res => {
+        updateDelete();
+      })
+
+      .catch(err => {
+        console.log(err);
+      });
   };
   const drawer = (
     <div>
@@ -410,7 +445,7 @@ const DashBoard = props => {
                       </div>
                       <div className="txt">
                         <Typography variant="h5" component="h2">
-                         {item.bedrooms}
+                          {item.bedrooms}
                         </Typography>
                       </div>
                     </div>
@@ -456,20 +491,39 @@ const DashBoard = props => {
                     </div>
                   </CardContent>
                   <CardActions>
-                    <Button className={classes.btn} size="large" disabled={disable(item.users_id)}>
+                    <Button
+                      className={classes.btn}
+                      size="large"
+                      disabled={disable(item.users_id)}
+                      onClick={() => handleOpenEdit(item.id)}
+                    >
                       Edit
                     </Button>
-                    <Button className={classes.btn} size="large" disabled={disable(item.users_id)}>
+                    <Button
+                      className={classes.btn}
+                      size="large"
+                      disabled={disable(item.users_id)}
+                      onClick={() => handleDelete(item.id)}
+                    >
                       Delete
                     </Button>
                   </CardActions>
                 </Card>
-                
               </Grid>
             ))}
           </Grid>
         </div>
-        <AddListing handleClose={handleClose} open={open} />
+        <AddListing
+          updateDelete={updateDelete}
+          handleClose={handleClose}
+          open={open}
+        />
+        <EditListing
+          updateDelete={updateDelete}
+          handleCloseEdit={handleCloseEdit}
+          openEdit={openEdit}
+          dataToEdit={dataToEdit}
+        />
       </main>
     </div>
   );
