@@ -31,7 +31,7 @@ export default function Onboarding (props){
           <Typography variant="h6" className={classes.title}>
           AirBnB Optimal Price
           </Typography>
-          <Link href="www.google.com"  color="inherit">
+          <Link href="https://landing-page-anqyg9ytl.now.sh/"  color="inherit">
           <Button color="inherit"> Home</Button></Link>
           <Button onClick={() => props.history.push("/dashBoard")} color="inherit">Dashboard</Button>
         </Toolbar>

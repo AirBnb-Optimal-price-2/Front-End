@@ -62,7 +62,7 @@ const initialListing = {
   minimum_nights: "",
   extra_people: "",
   cleaning_fee: "",
-  users_id: localStorage.getItem("userID")
+  users_id: parseInt(localStorage.getItem("userID"))
 };
 export default function AddListing(props) {
   const classes = useStyles();
@@ -72,7 +72,7 @@ export default function AddListing(props) {
 
   const handleChange = e => {
     e.persist();
-  
+
     if (
       e.target.name == "accomodates" ||
       e.target.name == "bedrooms" ||
@@ -104,6 +104,7 @@ export default function AddListing(props) {
         sendListingBackDS
       )
       .then(res => {
+        console.log("the list", listing)
         console.log("data scie endpoint", res);
         const sendListingBackend = {
           ...listing,
@@ -115,11 +116,12 @@ export default function AddListing(props) {
           smoking_allowed: listing.smoking_allowed === "true",
           optimal_price: res.data.optimal_price
         };
+        console.log("data to back end", sendListingBackend);
         axiosWithAuth()
-          .post(`/api/user/${userID}/listings`, sendListingBackend)
+          .post(`/api/user/${userID}/listings`, listing)
           .then(res => {
+            props.updateDelete();
             console.log("res from postinf", res);
-            //TODO pass message success to dashboard and time it out
           })
           .catch(err => console.log(err));
         setListing(initialListing);
