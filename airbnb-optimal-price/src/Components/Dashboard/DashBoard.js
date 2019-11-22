@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -32,12 +32,12 @@ import KingBedOutlinedIcon from "@material-ui/icons/KingBedOutlined";
 import NightsStayOutlinedIcon from "@material-ui/icons/NightsStayOutlined";
 import LocalOfferOutlinedIcon from "@material-ui/icons/LocalOfferOutlined";
 import AttachMoneyOutlinedIcon from "@material-ui/icons/AttachMoneyOutlined";
-import avater from "../../images/avater.jpg"
+import avater from "../../images/avater.jpg";
 import AddListing from "./AddListing";
-import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined';
-import { connect } from "react-redux"
-import { fetchProfile } from "../../redux/action"
-
+import BathtubOutlinedIcon from "@material-ui/icons/BathtubOutlined";
+import { connect } from "react-redux";
+import { fetchProfile } from "../../redux/action";
+import { axiosWithAuth } from "../../utils/axiosWithAuth";
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -108,47 +108,99 @@ const useStyles = makeStyles(theme => ({
     border: "1px solid #FF5A5F",
     "&:hover": {
       color: "#fff",
-      background:"#FF5A5F"}
+      background: "#FF5A5F"
+    }
   },
   card: {
-    minWidth: 275
+    minWidth: 275,
+    margin: "5px"
   },
   avatar: {
-    margin: 10,
+    margin: 10
   },
   bigAvatar: {
     margin: 10,
     width: 150,
-    height: 150,
-  },
+    height: 150
+  }
 }));
 
-const DashBoard=({props,fetchProfile})=> {
-  const { container } ={ props};
-  const message= localStorage.getItem('message')
+const DashBoard = props => {
+  const { container } = { props };
+  const message = localStorage.getItem("message");
   const classes = useStyles();
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const [filter, setFilter] = React.useState("");
-  const [listing,setListing]=React.useState("")
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [filter, setFilter] = useState("");
+  const [listing, setListing] = useState([]);
   const inputLabel = React.useRef(null);
-  const [labelWidth, setLabelWidth] = React.useState(0);
-  React.useEffect(() => {
+  const [labelWidth, setLabelWidth] = useState(0);
+  const userID = localStorage.getItem("userID");
+  useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
-  React.useEffect(() => {
-    console.log("from dash",listing)
-  }, [listing]);
 
+  console.log(listing);
   const handleChange = event => {
     setFilter(event.target.value);
   };
+  useEffect(() => {
+    switch (filter) {
+      case "":
+        axiosWithAuth()
+          .get(`/api/user/${userID}/listings`)
+          .then(res => {
+            console.log(
+              "Iam response from listing posted by current user",
+              res.data.listings
+            );
+            setListing(res.data.listings);
+          })
+
+          .catch(err => {
+            console.log(err);
+          });
+
+        break;
+      case 10:
+        axiosWithAuth()
+          .get(`/api/user/${userID}/listings`)
+          .then(res => {
+            console.log(
+              "Iam response from listing posted by current user",
+              res.data
+            );
+            setListing(res.data.listings);
+            console.log("Listing by user", listing);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        break;
+
+      case 20:
+        axiosWithAuth()
+          .get(`/api/listings`)
+          .then(res => {
+            console.log(
+              "Iam response from listing posted by all user",
+              res
+            );
+            setListing(res.data);
+            console.log("Listing by all user", listing);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        break;
+    }
+
+      }, [filter]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -157,20 +209,35 @@ const DashBoard=({props,fetchProfile})=> {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userID");
+    localStorage.removeItem("message");
+    props.history.push("/");
+  };
+  const disable = id => {
+    if (parseInt(localStorage.getItem("userID")) === id) {
+      return false;
+    } else return true;
+  };
   const drawer = (
-  
     <div>
-      
       <Grid container justify="center" alignItems="center">
         <img className="logo" src={Airbnb2} alt="Logo" />
       </Grid>
       <Divider />
       <List>
-        <ListItemText>  <Grid container justify="center" alignItems="center">
-      <Avatar alt="Remy Sharp" src={avater} className={classes.bigAvatar} />
-    </Grid></ListItemText>
-    
+        <ListItemText>
+          {" "}
+          <Grid container justify="center" alignItems="center">
+            <Avatar
+              alt="Remy Sharp"
+              src={avater}
+              className={classes.bigAvatar}
+            />
+          </Grid>
+        </ListItemText>
+
         <ListItemText> {message} </ListItemText>
         <Button className={classes.button}>Edit Profile</Button>
       </List>
@@ -208,7 +275,11 @@ const DashBoard=({props,fetchProfile})=> {
                   className={classes.iconHover}
                   style={{ fontSize: 30, color: "#fff" }}
                 />
-                <Button variant="outlined" className={classes.button}>
+                <Button
+                  variant="outlined"
+                  className={classes.button}
+                  onClick={logout}
+                >
                   <span>
                     <ExitToAppOutlinedIcon
                       className={classes.iconHover}
@@ -298,100 +369,107 @@ const DashBoard=({props,fetchProfile})=> {
         <div className="listings">
           <Grid
             container
-            spacing={2}
+            spacing={1}
             direction="row"
             justify="flex-start"
             alignItems="flex-start"
           >
-            <Grid item xs={12} sm={4}>
-              <Card className={classes.card}>
-                <CardContent>
-                  <div className="contItem">
-                    <div>
-                      <LocationCityOutlinedIcon
-                        style={{ fontSize: 50, color: "#FF5A5F" }}
-                      />
+            {listing.map(item => (
+              <Grid key={item.id} item xs={12} sm={4}>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <div className="contItem">
+                      <div>
+                        <LocationCityOutlinedIcon
+                          style={{ fontSize: 50, color: "#FF5A5F" }}
+                        />
+                      </div>
+                      <div className="txt">
+                        <Typography variant="h4" component="h2">
+                          {item.label}
+                        </Typography>
+                      </div>
                     </div>
-                    <div className="txt">
-                      <Typography variant="h4" component="h2">
-                        Aso Rock
-                      </Typography>
+                    <div className="contItem">
+                      <div>
+                        <GroupOutlinedIcon
+                          style={{ fontSize: 50, color: "#FF5A5F" }}
+                        />
+                      </div>
+                      <div className="txt">
+                        <Typography variant="h5" component="h2">
+                          {item.accomodates}
+                        </Typography>
+                      </div>
                     </div>
-                  </div>
-                  <div className="contItem">
-                    <div>
-                      <GroupOutlinedIcon
-                        style={{ fontSize: 50, color: "#FF5A5F" }}
-                      />
+                    <div className="contItem">
+                      <div>
+                        <KingBedOutlinedIcon
+                          style={{ fontSize: 50, color: "#FF5A5F" }}
+                        />
+                      </div>
+                      <div className="txt">
+                        <Typography variant="h5" component="h2">
+                         {item.bedrooms}
+                        </Typography>
+                      </div>
                     </div>
-                    <div className="txt">
-                      <Typography variant="h5" component="h2">
-                        3
-                      </Typography>
+                    <div className="contItem">
+                      <div>
+                        <NightsStayOutlinedIcon
+                          style={{ fontSize: 50, color: "#FF5A5F" }}
+                        />
+                      </div>
+                      <div className="txt">
+                        <Typography variant="h5" component="h2">
+                          {item.minimum_nights}
+                        </Typography>
+                      </div>
                     </div>
-                  </div>
-                  <div className="contItem">
-                    <div>
-                      <KingBedOutlinedIcon
-                        style={{ fontSize: 50, color: "#FF5A5F" }}
-                      />
+                    <div className="contItem">
+                      <div>
+                        <BathtubOutlinedIcon
+                          style={{ fontSize: 50, color: "#FF5A5F" }}
+                        />
+                      </div>
+                      <div className="txt">
+                        <Typography variant="h5" component="h2">
+                          {item.bathrooms}
+                        </Typography>
+                      </div>
                     </div>
-                    <div className="txt">
-                      <Typography variant="h5" component="h2">
-                        5
-                      </Typography>
+
+                    <div className="contItem">
+                      <div>
+                        <LocalOfferOutlinedIcon
+                          style={{ fontSize: 50, color: "#FF5A5F" }}
+                        />
+                      </div>
+                      <div className="txt">
+                        <Typography variant="h5" component="h2">
+                          <span>
+                            <AttachMoneyOutlinedIcon />
+                          </span>
+                          {item.optimal_price}
+                        </Typography>
+                      </div>
                     </div>
-                  </div>
-                  <div className="contItem">
-                    <div>
-                      <NightsStayOutlinedIcon
-                        style={{ fontSize: 50, color: "#FF5A5F" }}
-                      />
-                    </div>
-                    <div className="txt">
-                      <Typography variant="h5" component="h2">
-                        1
-                      </Typography>
-                    </div>
-                  </div>
-                  <div className="contItem">
-                    <div>
-                      <BathtubOutlinedIcon
-                        style={{ fontSize: 50, color: "#FF5A5F" }}
-                      />
-                    </div>
-                    <div className="txt">
-                      <Typography variant="h5" component="h2">
-                        3
-                      </Typography>
-                    </div>
-                  </div>
-                  
-                  <div className="contItem">
-                    <div>
-                      <LocalOfferOutlinedIcon
-                        style={{ fontSize: 50, color: "#FF5A5F" }}
-                      />
-                    </div>
-                    <div className="txt">
-                      <Typography variant="h5" component="h2">
-                        <span>
-                          <AttachMoneyOutlinedIcon />
-                        </span>
-                        100
-                      </Typography>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardActions>
-                  <Button className={classes.btn} size="large">Edit</Button>
-                  <Button className={classes.btn} size="large">Delete</Button>
-                </CardActions>
-              </Card>
-            </Grid>
+                  </CardContent>
+                  <CardActions>
+                    <Button className={classes.btn} size="large" disabled={disable(item.users_id)}>
+                      Edit
+                    </Button>
+                    <Button className={classes.btn} size="large" disabled={disable(item.users_id)}>
+                      Delete
+                    </Button>
+                  </CardActions>
+                </Card>
+                
+              </Grid>
+            ))}
           </Grid>
         </div>
-        <AddListing setListing={setListing}handleClose={handleClose} open={open}/>
+        <AddListing handleClose={handleClose} open={open} />
       </main>
     </div>
   );
@@ -399,7 +477,7 @@ const DashBoard=({props,fetchProfile})=> {
 
 const mapStateToProps = state => {
   return {
-     message:state.message
-  }
-}
-export default connect(mapStateToProps, {fetchProfile})(DashBoard);
+    message: state.message
+  };
+};
+export default connect(mapStateToProps, { fetchProfile })(DashBoard);

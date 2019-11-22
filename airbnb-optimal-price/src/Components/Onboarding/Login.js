@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
 
  const Login= (props)=> {
    const submitBtn=()=>{
-     setTimeout(function(){props.history.push('/dashBoard')} ,7000)
+    //  setTimeout(function(){props.history.push('/dashBoard')} ,7000)
    }
   const classes = useStyles();
   return (
@@ -150,6 +150,9 @@ const FormikLogin = withFormik({
   //You can use this to see the values
   handleSubmit(values,{resetForm,...rest}){
     rest.props.login(values)
+    .then(()=>{
+      rest.props.history.push('/dashBoard')
+    })
   }
 })(Login);
 const mapStateToProps = state => {
