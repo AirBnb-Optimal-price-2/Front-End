@@ -18,7 +18,7 @@ function App() {
         <Route exact path="/"  component ={Login}  />
         <Route   exact path="/SignUp" component={SignUp} />
         <Route   exact path="/ForgetPassword" component={ForgetPassword} />
-        <PrivateRoute  path="/dashBoard" component={DashBoard}  />
+        <PrivateRoute  exact path="/dashBoard"  render={props=> <DashBoard {...props}/>}/>
 
         
     </div>

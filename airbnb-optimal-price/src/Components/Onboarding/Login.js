@@ -153,7 +153,6 @@ const FormikLogin = withFormik({
     .then(()=>{
       rest.props.history.push('/dashBoard')
     })
-    console.log("this rest",rest)
   }
 })(Login);
 const mapStateToProps = state => {

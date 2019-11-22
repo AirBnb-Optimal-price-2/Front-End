@@ -20,7 +20,6 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function Onboarding (props){
-  console.log(props)
   const classes = useStyles();
   
     return(

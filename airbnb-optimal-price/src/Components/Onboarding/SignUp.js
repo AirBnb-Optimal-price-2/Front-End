@@ -7,8 +7,6 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import MenuItem from "@material-ui/core/MenuItem";
-import clsx from "clsx";
 import { Link } from "react-router-dom";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import { withFormik, Form, Field } from "formik";
@@ -156,14 +154,12 @@ const FormikSignUp = withFormik({
   }),
   //You can use this to see the values
   handleSubmit(values, {resetForm, ...rest}) {
-    console.log(rest)
     rest.props.register(values)
   
   }
 
 })(SignUp);
 const mapStateToProps = state => {
-  console.log(state)
   return {
     loading: state.loading,
     message: state.message

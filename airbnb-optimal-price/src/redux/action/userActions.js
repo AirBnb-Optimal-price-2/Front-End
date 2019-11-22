@@ -26,6 +26,7 @@ export const login = credentials => dispatch => {
   return axiosWithAuth()
     .post("/api/auth/login", credentials)
     .then(res => {
+      console.log(res.data)
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userID", res.data.user_id);
       localStorage.setItem("message", res.data.message);

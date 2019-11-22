@@ -18,7 +18,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import axios from "axios";
-
+import { axiosWithAuth } from "../../utils/axiosWithAuth";
 const useStyles = makeStyles(theme => ({
   modal: {
     display: "flex",
@@ -68,15 +68,11 @@ export default function AddListing(props) {
   const classes = useStyles();
   const inputLabel = React.useRef(null);
   const [listing, setListing] = React.useState(initialListing);
+  const userID = localStorage.getItem("userID");
 
   const handleChange = e => {
     e.persist();
-    // if (e.target.value == "true") {
-    //   setListing({ ...listing, [e.target.name]: true });
-    // }
-    // else if ((e.target.value == "false")) {
-    //   setListing({ ...listing, [e.target.name]: false });
-    // }
+  
     if (
       e.target.name == "accomodates" ||
       e.target.name == "bedrooms" ||
@@ -119,8 +115,13 @@ export default function AddListing(props) {
           smoking_allowed: listing.smoking_allowed === "true",
           optimal_price: res.data.optimal_price
         };
-        console.log("Back end", sendListingBackend);
-        props.setListing(sendListingBackend);
+        axiosWithAuth()
+          .post(`/api/user/${userID}/listings`, sendListingBackend)
+          .then(res => {
+            console.log("res from postinf", res);
+            //TODO pass message success to dashboard and time it out
+          })
+          .catch(err => console.log(err));
         setListing(initialListing);
       })
       .catch(error => console.log(error));
