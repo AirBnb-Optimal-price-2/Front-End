@@ -14,14 +14,12 @@ function App() {
     <div >
 
         
-       <Router history={history}>
-       < Onboarding />
+       < Route  component={ Onboarding} />
         <Route exact path="/"  component ={Login}  />
         <Route   exact path="/SignUp" component={SignUp} />
         <Route   exact path="/ForgetPassword" component={ForgetPassword} />
         <PrivateRoute  path="/dashBoard" component={DashBoard}  />
 
-        </Router>
         
     </div>
   );

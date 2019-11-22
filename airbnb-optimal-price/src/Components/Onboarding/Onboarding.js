@@ -4,10 +4,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import history from "../../history"
-
+import { Link } from '@material-ui/core';
+ 
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -24,18 +22,19 @@ const useStyles = makeStyles(theme => ({
 export default function Onboarding (props){
   console.log(props)
   const classes = useStyles();
- return(
+  
+    return(
 <div className="header">
 <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar>
-        
+      
           <Typography variant="h6" className={classes.title}>
           AirBnB Optimal Price
           </Typography>
-          <Button color="inherit">Home</Button>
-          <Button onClick={() => history.push("/dashBoard")} color="inherit">Dashboard</Button>
-            {/* <Button onClick={logout} color="inherit">Log Out</Button> */}
+          <Link href="www.google.com"  color="inherit">
+          <Button color="inherit"> Home</Button></Link>
+          <Button onClick={() => props.history.push("/dashBoard")} color="inherit">Dashboard</Button>
         </Toolbar>
       </AppBar>
     </div>
